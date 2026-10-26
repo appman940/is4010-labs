@@ -10,7 +10,6 @@
 
 fn main() {
     println!("Week 09: Rust basics");
-
     // Feel free to call your functions here to try them out.
     println!("add(3, 4) = {}", add(3, 4));
     println!("multiply(3, 4) = {}", multiply(3, 4));
@@ -43,8 +42,8 @@ fn main() {
 /// assert_eq!(add(2, 3), 5);
 /// assert_eq!(add(-1, 1), 0);
 /// ```
-fn add(_a: i32, _b: i32) -> i32 {
-    todo!("Implement add")
+fn add(a: i32, b: i32) -> i32 {
+    a + b
 }
 
 /// Returns the product of `a` and `b`.
@@ -54,8 +53,8 @@ fn add(_a: i32, _b: i32) -> i32 {
 /// assert_eq!(multiply(3, 4), 12);
 /// assert_eq!(multiply(0, 99), 0);
 /// ```
-fn multiply(_a: i32, _b: i32) -> i32 {
-    todo!("Implement multiply")
+fn multiply(a: i32, b: i32) -> i32 {
+    a * b
 }
 
 // ============================================================================
@@ -69,8 +68,8 @@ fn multiply(_a: i32, _b: i32) -> i32 {
 /// assert!(is_even(4));
 /// assert!(!is_even(7));
 /// ```
-fn is_even(_n: i32) -> bool {
-    todo!("Implement is_even")
+fn is_even(n: i32) -> bool {
+    n % 2 == 0
 }
 
 // ============================================================================
@@ -85,8 +84,12 @@ fn is_even(_n: i32) -> bool {
 /// assert_eq!(max(3, 9), 9);
 /// assert_eq!(max(5, 5), 5);
 /// ```
-fn max(_a: i32, _b: i32) -> i32 {
-    todo!("Implement max")
+fn max(a: i32, b: i32) -> i32 {
+    if a > b {
+        a
+    } else {
+        b
+    }
 }
 
 // ============================================================================
@@ -100,8 +103,8 @@ fn max(_a: i32, _b: i32) -> i32 {
 /// assert_eq!(square(5), 25);
 /// assert_eq!(square(0), 0);
 /// ```
-fn square(_n: i32) -> i32 {
-    todo!("Implement square")
+fn square(n: i32) -> i32 {
+    n * n
 }
 
 // ============================================================================
@@ -115,8 +118,8 @@ fn square(_n: i32) -> i32 {
 /// assert_eq!(reverse_string("hello"), "olleh");
 /// assert_eq!(reverse_string(""), "");
 /// ```
-fn reverse_string(_s: &str) -> String {
-    todo!("Implement reverse_string")
+fn reverse_string(s: &str) -> String {
+    s.chars().rev().collect()
 }
 
 /// Joins words with the given separator.
@@ -126,8 +129,8 @@ fn reverse_string(_s: &str) -> String {
 /// assert_eq!(concat_with_separator(&["hello", "world"], "-"), "hello-world");
 /// assert_eq!(concat_with_separator(&[], ","), "");
 /// ```
-fn concat_with_separator(_words: &[&str], _sep: &str) -> String {
-    todo!("Implement concat_with_separator")
+fn concat_with_separator(words: &[&str], sep: &str) -> String {
+    words.join(sep)
 }
 
 // ============================================================================
@@ -141,8 +144,8 @@ fn concat_with_separator(_words: &[&str], _sep: &str) -> String {
 /// assert_eq!(find_max_in_vec(&[1, 5, 3]), Some(5));
 /// assert_eq!(find_max_in_vec(&[]), None);
 /// ```
-fn find_max_in_vec(_numbers: &[i32]) -> Option<i32> {
-    todo!("Implement find_max_in_vec")
+fn find_max_in_vec(numbers: &[i32]) -> Option<i32> {
+    numbers.iter().copied().max()
 }
 
 /// Returns the count of even numbers in the slice.
@@ -152,17 +155,17 @@ fn find_max_in_vec(_numbers: &[i32]) -> Option<i32> {
 /// assert_eq!(count_evens(&[1, 2, 3, 4]), 2);
 /// assert_eq!(count_evens(&[]), 0);
 /// ```
-fn count_evens(_numbers: &[i32]) -> usize {
-    todo!("Implement count_evens")
+fn count_evens(numbers: &[i32]) -> usize {
+    numbers.iter().filter(|&&n| n % 2 == 0).count()
 }
 
 // ============================================================================
 // TESTS: DO NOT MODIFY
 // ============================================================================
+
 #[cfg(test)]
 mod tests {
     use super::*;
-
     // --- add ---
     #[test]
     fn test_add_positive() {
@@ -186,7 +189,6 @@ mod tests {
     fn test_multiply_positive() {
         assert_eq!(multiply(3, 4), 12);
     }
-
     #[test]
     fn test_multiply_by_zero() {
         assert_eq!(multiply(0, 99), 0);
@@ -206,7 +208,6 @@ mod tests {
         assert!(is_even(2));
         assert!(is_even(100));
     }
-
     #[test]
     fn test_is_even_false() {
         assert!(!is_even(1));
@@ -230,7 +231,6 @@ mod tests {
     fn test_max_second_larger() {
         assert_eq!(max(3, 9), 9);
     }
-
     #[test]
     fn test_max_equal() {
         assert_eq!(max(5, 5), 5);
@@ -258,7 +258,6 @@ mod tests {
         // (-3)² = 9
         assert_eq!(square(-3), 9);
     }
-
     // --- reverse_string ---
     #[test]
     fn test_reverse_string_basic() {
@@ -275,7 +274,6 @@ mod tests {
     fn test_reverse_string_single_char() {
         assert_eq!(reverse_string("a"), "a");
     }
-
     // --- concat_with_separator ---
     #[test]
     fn test_concat_basic() {
@@ -295,7 +293,6 @@ mod tests {
     fn test_concat_single_word() {
         assert_eq!(concat_with_separator(&["hello"], "-"), "hello");
     }
-
     // --- find_max_in_vec ---
     #[test]
     fn test_find_max_basic() {
@@ -312,7 +309,6 @@ mod tests {
     fn test_find_max_negative() {
         assert_eq!(find_max_in_vec(&[-5, -1, -10]), Some(-1));
     }
-
     #[test]
     fn test_find_max_single() {
         assert_eq!(find_max_in_vec(&[42]), Some(42));
@@ -334,7 +330,6 @@ mod tests {
     fn test_count_evens_empty() {
         assert_eq!(count_evens(&[]), 0);
     }
-
     #[test]
     fn test_count_evens_negative() {
         assert_eq!(count_evens(&[-2, -1, 0, 1, 2]), 3); // -2, 0, 2 are even
