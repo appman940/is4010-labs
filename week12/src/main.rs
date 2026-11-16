@@ -5,23 +5,32 @@
 //
 // Run: cargo test
 
+// Week 12: Generics and traits
+//
+// Implement a generic Stack<T> data structure and make it work with Rust's
+// standard Display and Iterator traits.
+//
+// Run: cargo test
+
 use std::fmt;
 
 fn main() {
     println!("Week 12: Generics and traits");
 
-    // Try it out once you have implementations working:
-    // let mut s: Stack<i32> = Stack::new();
-    // s.push(1);
-    // s.push(2);
-    // s.push(3);
-    // println!("{}", s);           // requires Display impl
-    // for item in s { println!("{}", item); }  // requires IntoIterator impl
+    let mut s: Stack<i32> = Stack::new();
+    s.push(1);
+    s.push(2);
+    s.push(3);
+
+    println!("{}", s);
+
+    for item in s {
+        println!("{}", item);
+    }
 }
 
 // ============================================================================
 // STACK<T>: implement all methods and trait impls below.
-// When you implement a method, remove the leading `_` from each parameter name.
 // ============================================================================
 
 /// A generic last-in, first-out (LIFO) stack.
@@ -36,54 +45,71 @@ pub struct Stack<T> {
 impl<T> Stack<T> {
     /// Creates a new, empty stack.
     pub fn new() -> Self {
-        todo!("Implement Stack::new")
+        Self { data: Vec::new() }
     }
 
     /// Pushes `item` onto the top of the stack.
-    pub fn push(&mut self, _item: T) {
-        todo!("Implement push")
+    pub fn push(&mut self, item: T) {
+        self.data.push(item);
     }
 
-    /// Removes and returns the top item, or `None` if the stack is empty.
+    /// Removes and returns the top item, or None if empty.
     pub fn pop(&mut self) -> Option<T> {
-        todo!("Implement pop")
+        self.data.pop()
     }
 
-    /// Returns a reference to the top item without removing it,
-    /// or `None` if the stack is empty.
+    /// Returns a reference to the top item without removing it.
     pub fn peek(&self) -> Option<&T> {
-        todo!("Implement peek")
+        self.data.last()
     }
 
-    /// Returns `true` if the stack contains no items.
+    /// Returns true if the stack contains no items.
     pub fn is_empty(&self) -> bool {
-        todo!("Implement is_empty")
+        self.data.is_empty()
     }
 
     /// Returns the number of items in the stack.
     pub fn len(&self) -> usize {
-        todo!("Implement len")
+        self.data.len()
     }
 }
 
 // ============================================================================
 // DISPLAY: format the stack as "[bottom, ..., top]"
-//
-// Example: a stack with 1 pushed first and 3 pushed last prints as "[1, 2, 3]".
-// An empty stack prints as "[]".
 // ============================================================================
+
 impl<T: fmt::Debug> fmt::Display for Stack<T> {
-    fn fmt(&self, _f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        todo!("Implement Display for Stack<T>, hint: write!(f, \"[...]\") using self.data")
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{:?}", self.data)
     }
 }
 
 // ============================================================================
-// ITERATOR: consume the stack from top to bottom
-//
-// Implement the helper struct and then the two trait impls below.
+// ITERATOR: consume the stack from top to bottom.
 // ============================================================================
 
+pub struct StackIntoIter<T> {
+    data: std::vec::IntoIter<T>,
+}
+
+impl<T> Iterator for StackIntoIter<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.data.next_back()
+    }
+}
+
+impl<T> IntoIterator for Stack<T> {
+    type Item = T;
+    type IntoIter = StackIntoIter<T>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        StackIntoIter {
+            data: self.data.into_iter(),
+        }
+    }
+}
 // ============================================================================
 // TESTS: DO NOT MODIFY
 // ============================================================================
